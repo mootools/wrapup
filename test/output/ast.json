@@ -195,8 +195,31 @@
                                         "name": "exports"
                                       },
                                       {
-                                        "type": "Identifier",
-                                        "name": "window"
+                                        "type": "ConditionalExpression",
+                                        "test": {
+                                          "type": "BinaryExpression",
+                                          "operator": "==",
+                                          "left": {
+                                            "type": "UnaryExpression",
+                                            "operator": "typeof",
+                                            "argument": {
+                                              "type": "Identifier",
+                                              "name": "window"
+                                            }
+                                          },
+                                          "right": {
+                                            "type": "Literal",
+                                            "value": "undefined"
+                                          }
+                                        },
+                                        "consequent": {
+                                          "type": "ObjectExpression",
+                                          "properties": []
+                                        },
+                                        "alternate": {
+                                          "type": "Identifier",
+                                          "name": "window"
+                                        }
                                       }
                                     ]
                                   }

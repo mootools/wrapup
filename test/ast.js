@@ -18,6 +18,7 @@ wrup.on("error", function(err){
 wrup.require(__dirname + "/fixtures/up").up(function(err, actual){
     assert.ifError(err)
     var should = fs.readFileSync(__dirname + "/output/ast.json")
+    fs.writeFileSync(__dirname + "/output/ast.result.json", actual)
     assert.equal(actual, should, "AST JSON structure should be equal")
     test.passed('ast')
 })
