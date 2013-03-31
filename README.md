@@ -11,6 +11,7 @@
  * WrapUp can convert CommonJS modules to AMD modules.
 
 [![Build Status](https://secure.travis-ci.org/mootools/wrapup.png)](https://travis-ci.org/mootools/wrapup)
+[![Dependency Status](https://gemnasium.com/mootools/wrapup.png)](https://gemnasium.com/mootools/wrapup)
 
 ## Installation
 
