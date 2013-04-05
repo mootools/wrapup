@@ -42,4 +42,5 @@ if (process.argv.length > 2){
     require('./sourcemap')
     require('./wrup')
     require('./js-error')
+    require('./amdOneFile')
 }
