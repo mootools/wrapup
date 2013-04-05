@@ -29,13 +29,17 @@ exports.test = function(test){
     exports.passed(test)
 }
 
-require('./up')
-require('./pipe')
-require('./globalize')
-require('./notresolved')
-require('./compress')
-require('./ast')
-require('./graph')
-require('./sourcemap')
-require('./wrup')
-require('./js-error')
+if (process.argv.length > 2){
+    require('./' + process.argv[2])
+} else {
+    require('./up')
+    require('./pipe')
+    require('./globalize')
+    require('./notresolved')
+    require('./compress')
+    require('./ast')
+    require('./graph')
+    require('./sourcemap')
+    require('./wrup')
+    require('./js-error')
+}
