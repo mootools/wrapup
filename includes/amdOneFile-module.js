@@ -1,3 +1,3 @@
-define('name', function(require, module, exports, global){
+define('name', function(require, exports, module){
 
 })

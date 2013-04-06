@@ -1,4 +1,4 @@
-define('test/fixtures/up', function(require, module, exports, global) {
+define('test/fixtures/up', function(require, exports, module) {
     require("test/fixtures/e")
     var a = require("test/fixtures/up1").name
     var b = new (require("test/fixtures/up1"))()
@@ -8,11 +8,11 @@ define('test/fixtures/up', function(require, module, exports, global) {
     module.exports = require("test/fixtures/up1")()
 });
 
-define('test/fixtures/e', function(require, module, exports, global) {
+define('test/fixtures/e', function(require, exports, module) {
     module.exports = 'e'
 });
 
-define('test/fixtures/up1', function(require, module, exports, global) {
+define('test/fixtures/up1', function(require, exports, module) {
     module.exports = function() {
         console.log("up1")
     }
