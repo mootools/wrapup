@@ -2,8 +2,10 @@ define([
     'module',
     'exports',
     './f/index',
-    './f/g'
-], function (module, exports, __0, __1) {
+    './f/g',
+    './e'
+], function (module, exports, __0, __1, __2) {
     __0;
     __1;
+    __2;
 });
