@@ -21,9 +21,7 @@ exports.passed = function(test){
     console.log(("✔ " + test + " test passed").green)
 }
 
-exports.test = function(test, transformResult, transformShould){
-    var result = __dirname + '/output/' + test + '.result.js'
-    var should = __dirname + '/output/' + test + '.js'
+exports.testFiles = function(test, result, should, transformResult, transformShould){
     var resultAST = parse(result)
     var shouldAST = parse(should)
     if (transformResult) resultAST = transformResult(resultAST)
@@ -37,6 +35,13 @@ exports.test = function(test, transformResult, transformShould){
         console.log(diff.words(shouldJS, resultJS))
         throw e
     }
+
+}
+
+exports.test = function(test, transformResult, transformShould){
+    var result = __dirname + '/output/' + test + '.result.js'
+    var should = __dirname + '/output/' + test + '.js'
+    exports.testFiles(test, result, should, transformResult, transformShould)
 }
 
 if (process.argv.length > 2){
