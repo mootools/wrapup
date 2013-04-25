@@ -136,11 +136,14 @@ wrup.options({
    By default it uses global var statements.
  - `compress` if set to true, will compress the resulting javascript file using
    uglify-js. Defaults to false.
- - `output` only available in the cli, used to specify an output file. defaults
-   to stdout
+ - `output` Used to specify an output file. defaults to stdout. When using the
+   AMD output mode it is required to be the output directory.
  - `inPath` (cli: `--in-path`) Enforce that all modules are in a specified path.
    This helps security that a random file cannot require any file on the user's
    file system.
+ - `path` (cli: `--path`) When using the AMD output mode, this will trim the
+   first parts of the path, so `-r ./foo/bar/temp --path ./foo/bar` will just
+   result in a `temp.js` file in the `--output` directory.
  - `sourcemap` (cli: `--source-map`) Specify an output file where to generate
    source map.
  - `sourcemapURL` (cli: `--source-map-url`) `//@ sourceMappingURL` value, URL to

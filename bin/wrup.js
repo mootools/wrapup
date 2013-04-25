@@ -168,7 +168,7 @@ clint.on("command", function(name, value){
         case "--in-path"         :
             options.inPath = path.resolve(process.cwd(), value) || false
             break
-        case "--path"            : options.path = value || false;                      break
+        case "--path"            : options.path = value || false;                        break
         case "--watch"           : options.watch = value == null ? true : value;         break
         case "--source-map"      : options.sourcemap = value || false;                   break
         case "--source-map-url"  : options.sourcemapURL = value || false;                break
