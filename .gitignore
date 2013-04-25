@@ -2,3 +2,4 @@ node_modules
 .tm_properties
 __amd/
 test.*
+.tern-port
