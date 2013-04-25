@@ -18,4 +18,6 @@ wrup.on("error", function(err){
 wrup.require(__dirname + '/fixtures/h').amd(function(err){
     assert.ifError(err)
     test('amd', __dirname + '/output/amd-result/h.js', __dirname + '/output/amd/h.js')
+    test('amd', __dirname + '/output/amd-result/f/g.js', __dirname + '/output/amd/f/g.js')
+    test('amd', __dirname + '/output/amd-result/f/i.js', __dirname + '/output/amd/f/i.js')
 })
