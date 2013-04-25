@@ -159,6 +159,9 @@ Additional cli options:
 
  - `--amd` when using the `--amd`, it will convert CommonJS modules to AMD
    modules. The `--output` option should be a directory.
+ - `--amd-one-file` will create a AMD-style optimized file. This is a file
+   with multiple `define()` calls for each module. It provides a global
+   `require()` (if not yet defined before).
  - `--digraph` generate a [dot](http://www.graphviz.org/) output. If you've
    installed graphviz, you can use the `--output` option, like
    `--output graph.png`
@@ -244,6 +247,12 @@ wrup -r moofx ./moofx
 
 # building AMD
 wrup --require ./main.js --amd --output ./converted-to-amd
+
+# building AMD with the --path option
+wrup --require ./path/to/files/file.js --path ./path/to/files --output ./amd --amd
+
+# create a single optimized AMD-style using define() functions
+wrup --require ./main.js --amd-one-file
 
 # piping the AST JSON into uglifyjs
 wrup --require ./main.js --ast | uglifyjs --spidermonkey -c -m
