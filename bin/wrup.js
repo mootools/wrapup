@@ -108,6 +108,9 @@ clint.command('--amd', null,
               "Convert CommonJS modules to AMD modules. The --output option is used " +
               "as output directory and is required.", bool)
 
+clint.command('--amd-one-file', null,
+              "Convert CommonJS modules to AMD modules with one resulting file.", bool)
+
 clint.command('--ast', null,
               "Output AST JSON structure, so it can be used by other tools, " +
               "like uglifyjs2 with " + "--spidermonkey".green, bool)
@@ -152,20 +155,21 @@ clint.on("command", function(name, value){
     switch (name){
 
         case "--help"            : help(0);                                              break
-        case "--version"         : console.log(json.version); process.exit(0);   break
-        case "--digraph"         : options.graph = value == null ? true : value; break
-        case "--amd"             : options.amd = value == null ? true : value;   break
-        case "--globalize"       : options.globalize = value;                    break
-        case "--compress"        : options.compress = true;                      break
-        case "--output"          : options.output = value || false;              break
+        case "--version"         : console.log(json.version); process.exit(0);           break
+        case "--digraph"         : options.graph = value == null ? true : value;         break
+        case "--amd"             : options.amd = value == null ? true : value;           break
+        case "--amd-one-file"    : options.amdOneFile = value == null ? true : value;    break
+        case "--globalize"       : options.globalize = value;                            break
+        case "--compress"        : options.compress = true;                              break
+        case "--output"          : options.output = value || false;                      break
         case "--in-path"         :
             options.inPath = path.resolve(process.cwd(), value) || false
             break
-        case "--watch"           : options.watch = value == null ? true : value; break
-        case "--source-map"      : options.sourcemap = value || false;           break
-        case "--source-map-url"  : options.sourcemapURL = value || false;        break
-        case "--source-map-root" : options.sourcemapRoot = value || false;       break
-        case "--ast"             : options.ast = value == null ? true : value;   break
+        case "--watch"           : options.watch = value == null ? true : value;         break
+        case "--source-map"      : options.sourcemap = value || false;                   break
+        case "--source-map-url"  : options.sourcemapURL = value || false;                break
+        case "--source-map-root" : options.sourcemapRoot = value || false;               break
+        case "--ast"             : options.ast = value == null ? true : value;           break
 
     }
 
@@ -209,6 +213,7 @@ clint.on('complete', function(){
     var method
     if (options.graph) method = 'graph'
     else if (options.amd) method = 'amd'
+    else if (options.amdOneFile) method = 'amdOneFile'
     else method = 'browser'
 
     if (options.watch) wrup.watch(method)

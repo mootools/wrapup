@@ -37,7 +37,8 @@
     "escodegen": "0.0.19",
     "esmangle": "0.0.11",
     "graphviz": "0.0.x",
-    "mkdirp": "0.3"
+    "mkdirp": "0.3",
+    "ansidiff": "~1.0.0"
   },
   "devDependencies": {},
   "optionalDependencies": {},
