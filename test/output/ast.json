@@ -84,7 +84,8 @@
                               "argument": {
                                 "type": "Identifier",
                                 "name": "module"
-                              }
+                              },
+                              "prefix": true
                             },
                             "consequent": {
                               "type": "BlockStatement",
@@ -205,7 +206,8 @@
                                             "argument": {
                                               "type": "Identifier",
                                               "name": "window"
-                                            }
+                                            },
+                                            "prefix": true
                                           },
                                           "right": {
                                             "type": "Literal",
