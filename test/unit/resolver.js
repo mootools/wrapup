@@ -3,7 +3,7 @@
 var path = require('path')
 var expect = require('expect.js')
 
-var Resolver = require('../../lib/resolve')
+var Resolver = require('../../lib/resolver')
 
 describe('Resolver', function(){
 
