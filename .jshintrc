@@ -1,8 +1,12 @@
 {
-	"asi": true,
-	"eqeqeq": false,
-	"eqnull": true,
-	"loopfunc": true,
-	"boss": true,
-	"node": true
+  "asi": true,
+  "eqeqeq": false,
+  "eqnull": true,
+  "loopfunc": true,
+  "boss": true,
+  "node": true,
+  "predef": [
+    "describe",
+    "it"
+  ]
 }

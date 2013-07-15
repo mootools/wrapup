@@ -32,7 +32,7 @@
     "async": "0.2",
     "colors": "*",
     "clint": "0.0.6",
-    "prime": "0.1",
+    "prime": "0.2",
     "esprima": "1.0",
     "escodegen": "0.0.x",
     "esmangle": "0.0.x",
@@ -40,7 +40,10 @@
     "mkdirp": "0.3",
     "ansidiff": "1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "expect.js": "0.2",
+    "mocha": "1.12"
+  },
   "optionalDependencies": {},
   "engines": {
     "node": ">=0.6"
