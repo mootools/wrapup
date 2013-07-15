@@ -21,13 +21,18 @@ program.on('require', function(option){
     else wrapup.require(option)
 })
 
+function write (watch){
+    return function(err, str){
+        if (err) errorHandler(err, watch)
+        else proc.stdout.write(str)
+    }
+}
+
 program.command('ascii')
     .description('list the dependencies as a tree')
     .action(function(){
-        wrapup.up(function(err, str){
-            if (err) errorHandler(err)
-            else proc.stdout.write(str)
-        })
+        if (program.watch) wrapup.watch(write(true))
+        else wrapup.up(write(false))
     })
 
 program.outputHelp = function(){
@@ -38,10 +43,12 @@ program.outputHelp = function(){
     process.stdout.write(this.helpInformation());
 }
 
-function errorHandler(err){
-    throw err
+function errorHandler(err, watch){
+    if (watch) console.error(err)
+    else throw err
 }
 
 module.exports = function(process){
+    proc = process
     program.parse(process.argv)
 }
