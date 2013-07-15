@@ -6,6 +6,8 @@ var colors  = require("colors")
 var json    = require("../package")
 var path    = require("path")
 
+var Browser = require('../lib/output/browser')
+
 var wrapup = new WrapUp()
 var proc
 
@@ -33,6 +35,16 @@ program.command('ascii')
     .action(function(){
         if (program.watch) wrapup.watch(write(true))
         else wrapup.up(write(false))
+    })
+
+program.command('browser')
+    .description('output the combined javascript')
+    .action(function(){
+        wrapup
+            .withOutput(new Browser())
+            .up(function(err, out){
+                process.stdout.write(out)
+            })
     })
 
 program.outputHelp = function(){
