@@ -7,8 +7,10 @@ var json    = require("../package")
 var path    = require("path")
 
 var Browser = require('../lib/output/browser')
+var Graph   = require('../lib/output/graph')
 
 var wrapup = new WrapUp()
+
 var proc
 
 
@@ -35,6 +37,16 @@ program.command('ascii')
     .action(function(){
         if (program.watch) wrapup.watch(write(true))
         else wrapup.up(write(false))
+    })
+
+program.command('graph')
+    .description('create a graphviz structured dependency graph')
+    .action(function(){
+        wrapup
+            .withOutput(new Graph())
+            .up(function(err, dot){
+                process.stdout.write(dot)
+            })
     })
 
 program.command('browser')
