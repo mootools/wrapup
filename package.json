@@ -49,6 +49,6 @@
     "node": ">=0.6"
   },
   "scripts": {
-    "test": "node ./test/run.js"
+    "test": "./node_modules/.bin/mocha ./test/unit --recursive"
   }
 }
