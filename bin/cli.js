@@ -52,11 +52,9 @@ program.command('graph')
 program.command('browser')
     .description('output the combined javascript')
     .action(function(){
-        wrapup
-            .withOutput(new Browser())
-            .up(function(err, out){
-                process.stdout.write(out)
-            })
+        wrapup.withOutput(new Browser())
+        if (program.watch) wrapup.watch(write(true))
+        else wrapup.up(write(false))
     })
 
 program.outputHelp = function(){
