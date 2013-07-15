@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 "use strict";
 
+require('./cli')(process)
+
+/*
+
 var WrapUp = require("../lib/wrapup"),
     clint  = require("clint")(),
     colors = require("colors"),
@@ -225,4 +229,11 @@ clint.on('complete', function(){
 
 })
 
+
+clint.on('complete', function(){
+
+})
+
 clint.parse(args)
+
+*/
