@@ -1,16 +1,10 @@
 "use strict";
 
 var assert = require('assert')
-var wrup   = require('../lib/main')()
 var test   = require('./run').test
-
-wrup.options({
+var wrup   = require('../lib/main')({
     output: __dirname + '/output/globalize.result.js',
     globalize: "this"
-})
-
-wrup.on("error", function(err){
-    assert.fail(err, undefined, "no errors should occur")
 })
 
 wrup.require("testing", __dirname + '/fixtures/e').up(function(err){

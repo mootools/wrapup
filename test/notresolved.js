@@ -1,19 +1,13 @@
 "use strict";
 
 var assert = require('assert')
-var wrup   = require('../lib/main')()
 var test   = require('./run').test
-
-wrup.options({
+var wrup   = require('../lib/main')({
     output: __dirname + '/output/notresolved.result.js'
 })
 
-wrup.on("error", function(err){
-    assert.fail(err, undefined, "no errors should occur")
-})
-
 var warnings = 0
-wrup.on("warn", function(){
+wrup.scanner.on("warn", function(){
     warnings++
 })
 

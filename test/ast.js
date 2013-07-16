@@ -6,14 +6,8 @@ var wrapup = require('../lib/main')
 var test   = require('./run')
 var diff   = require('ansidiff')
 
-var wrup = wrapup()
-
-wrup.options({
+var wrup = wrapup({
     ast: true
-})
-
-wrup.on("error", function(err){
-    assert.fail(err, undefined, "no errors should occur")
 })
 
 wrup.require(__dirname + "/fixtures/up").up(function(err, actual){

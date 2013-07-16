@@ -48,7 +48,7 @@ if (process.argv.length > 2){
     require('./' + process.argv[2])
 } else {
     require('./up')
-    require('./pipe')
+//    require('./pipe')
     require('./globalize')
     require('./notresolved')
     require('./compress')

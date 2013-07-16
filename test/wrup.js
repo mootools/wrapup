@@ -3,6 +3,7 @@
 var exec   = require('child_process').exec
 var assert = require('assert')
 var prime  = require('prime')
+var forOwn = require('prime/object/forOwn')
 var async  = require('async')
 var passed = require('./run').passed
 
@@ -18,16 +19,16 @@ var shouldExitWith = function(code){
 
 var commands = {
     // no modules required
-    '-r ./test/fixtures/up': shouldExitWith(0),
-    '-r ./test/fixtures/not-existing': shouldExitWith(1),
+    'browser -r ./test/fixtures/up': shouldExitWith(0),
+    'browser -r ./test/fixtures/not-existing': shouldExitWith(1),
     // requires --output option
-    '-r ./test/fixtures/up --amd --output __amd': shouldExitWith(0),
-    '-r ./test/fixtures/up --amd': shouldExitWith(1)
+    'amd -r ./test/fixtures/up --output __amd': shouldExitWith(0),
+    'amd -r ./test/fixtures/up': shouldExitWith(1)
 }
 
 var tasks = []
 
-prime.each(commands, function(test, command){
+forOwn(commands, function(test, command){
     tasks.push(function(callback){
         exec('./bin/wrup.js ' + command, {cwd: __dirname + '/../'}, test(callback, command))
     })
