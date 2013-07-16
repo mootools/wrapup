@@ -6,8 +6,10 @@ var colors  = require("colors")
 var json    = require("../package")
 var path    = require("path")
 
-var Browser = require('../lib/output/browser')
+var ASCII   = require('../lib/output/ascii')
 var Graph   = require('../lib/output/graph')
+var Browser = require('../lib/output/browser')
+var AMDOne  = require('../lib/output/amdOneFile')
 
 var wrapup = new WrapUp()
 
@@ -35,6 +37,7 @@ function write (watch){
 program.command('ascii')
     .description('list the dependencies as a tree')
     .action(function(){
+        wrapup.withOutput(new ASCII())
         if (program.watch) wrapup.watch(write(true))
         else wrapup.up(write(false))
     })
@@ -57,6 +60,14 @@ program.command('browser')
         else wrapup.up(write(false))
     })
 
+program.command('amd-combined')
+    .description('covert to AMD format and combine the modules into one file')
+    .action(function(){
+        wrapup.withOutput(new AMDOne())
+        if (program.watch) wrapup.watch(write(true))
+        else wrapup.up(write(false))
+    })
+
 program.outputHelp = function(){
     // header
     console.warn(" , , , __  __.  _   . . _  ".white)
@@ -73,4 +84,5 @@ function errorHandler(err, watch){
 module.exports = function(process){
     proc = process
     program.parse(process.argv)
+    if (!program.args.length) program.help();
 }
