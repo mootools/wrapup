@@ -10,6 +10,7 @@ var ASCII   = require('../lib/output/ascii')
 var Graph   = require('../lib/output/graph')
 var Browser = require('../lib/output/browser')
 var AMDOne  = require('../lib/output/amdOneFile')
+var AMD     = require('../lib/output/amd')
 
 var wrapup = new WrapUp()
 
@@ -44,6 +45,7 @@ program.command('ascii')
 
 program.command('graph')
     .description('create a graphviz structured dependency graph')
+    .option('-o, --output [path]', 'write the output to a file.')
     .action(function(){
         wrapup
             .withOutput(new Graph())
@@ -54,6 +56,7 @@ program.command('graph')
 
 program.command('browser')
     .description('output the combined javascript')
+    .option('-o, --output [path]', 'write the output to a file.')
     .action(function(){
         wrapup.withOutput(new Browser())
         if (program.watch) wrapup.watch(write(true))
@@ -61,12 +64,34 @@ program.command('browser')
     })
 
 program.command('amd-combined')
-    .description('covert to AMD format and combine the modules into one file')
-    .action(function(){
+    .description('convert to AMD format and combine the modules into one file')
+    .option('-o, --output [path]', 'write the output to a file.')
+    .action(function(args){
         wrapup.withOutput(new AMDOne())
         if (program.watch) wrapup.watch(write(true))
         else wrapup.up(write(false))
     })
+
+program.command('amd')
+    .description('convert the modules into the AMD format')
+    .option('-o, --output <path>', 'Output directory for the AMD modules')
+    .action(function(args){
+        var amd = new AMD()
+        amd.set('output', args.output)
+        wrapup.withOutput(amd)
+        if (program.watch){
+            wrapup.watch(function(err){
+                if (err) errorHandler(err, true)
+                else console.log('files written')
+            })
+        } else {
+            wrapup.up(function(err){
+                if (err) errorHandler(err)
+                else console.log('files written')
+            })
+        }
+    })
+
 
 program.outputHelp = function(){
     // header
