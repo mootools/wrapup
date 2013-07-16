@@ -4,7 +4,7 @@ var prime = require('prime')
 
 var Mock = prime({
 
-    inherits: require('../../../lib/output/output'),
+    inherits: require('../../../lib/output'),
 
     up: function(callback){
         callback()
