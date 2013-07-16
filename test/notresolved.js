@@ -13,6 +13,8 @@ wrup.scanner.on("warn", function(){
 
 wrup.require(__dirname + '/fixtures/a').up(function(err){
     assert.ifError(err)
-    assert.equal(2, warnings, "there are " + warnings + ", but should be 2")
-    test('notresolved')
+    setTimeout(function(){
+        assert.equal(2, warnings, "there are " + warnings + ", but should be 2")
+        test('notresolved')
+    }, 5)
 })
