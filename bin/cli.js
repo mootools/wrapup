@@ -12,9 +12,87 @@ var Browser = require('../lib/output/browser')
 var AMDOne  = require('../lib/output/amdOneFile')
 var AMD     = require('../lib/output/amd')
 
+function errorHandler(err, watch){
+
+    var title = err.message, message, dmessage
+
+    switch (err.type){
+        case "graphviz": break
+
+        case "js":
+            dmessage = "on " + err.module.yellow +
+                " required by " + err.source.yellow +
+                " at line " + err.line + ", column " + err.col
+            message = err.module + " on line " + err.line + ", column " + err.col
+            break
+
+        case "resolve":
+            dmessage = "on module " + err.module.yellow + " required by " + err.source.yellow
+            message  = err.module + " < " + err.source
+            break
+
+        case "empty": break
+
+        case "namespace":
+            dmessage = err.namespace.yellow + " already in use by " + err.module.yellow
+            message = err.namespace + " in use by " + err.module
+            break
+
+        case "native":
+            dmessage = "on module " + err.module.yellow + " required by " + err.source.yellow
+            message = "on module " + err.module + " required by " + err.source
+            break
+
+        case "not-in-path":
+            dmessage = "on module " + err.module.yellow + " required by " +
+                err.source.yellow + ". File should be in " + err.path.yellow
+            message = "on module " + err.module + " required by " +
+                err.source + ". File should be in " + err.path
+            break
+
+        case "out-of-scope":
+            dmessage = "on file " + err.file.yellow
+            message = "on file " + err.file
+            break
+
+    }
+
+    console.error(title.red.inverse + (dmessage ? ": " + dmessage : ""))
+
+    if (!watch) process.exit(1)
+}
+
+
+function write(watch){
+    return function(err, str){
+        if (err) errorHandler(err, watch)
+        else console.log(str)
+    }
+}
+
+function upCallback(args){
+    return function(err, str){
+        if (err) errorHandler(err)
+        else if (!args.output) console.log(str)
+        console.warn("DONE".green.inverse)
+    }
+}
+
+function watchCallback(args){
+    return function(err, str){
+        if (err) errorHandler(err, true)
+    }
+}
+
 var wrapup = new WrapUp()
 
-var proc
+wrapup.on('change', function(file){
+    console.warn("=>".blue.inverse + " " + path.relative(process.cwd(), file).grey + " was changed")
+})
+
+wrapup.scanner.on('warn', function(err){
+    errorHandler(err, true)
+})
 
 program
     .version(json.version)
@@ -32,28 +110,6 @@ program.on('in-path', function(option){
     wrapup.scanner.set('inPath', program.inPath)
 })
 
-function write(watch){
-    return function(err, str){
-        if (err) errorHandler(err, watch)
-        else proc.stdout.write(str)
-    }
-}
-
-function upCallback(args){
-    return function(err, str){
-        if (err) errorHandler(err)
-        else if (args.output) console.log('file written')
-        else process.stdout.write(str)
-    }
-}
-
-function watchCallback(args){
-    return function(err, str){
-        if (err) errorHandler(err, true)
-        else console.log('file was written')
-    }
-}
-
 program.command('ascii')
     .description('list the dependencies as a tree')
     .action(function(){
@@ -68,6 +124,9 @@ program.command('graph')
     .action(function(args){
         var graph = new Graph()
         graph.set('output', args.output)
+        graph.on('output', function(file){
+            console.warn("The file " + file.grey + " has been written")
+        })
         wrapup
             .withOutput(graph)
             .up(upCallback(args))
@@ -97,6 +156,9 @@ var browser = program.command('browser')
             console.error('when using the --watch option, the --output option is required')
             return
         }
+        browser.on('output', function(file){
+            console.warn("The file " + file.grey + " has been written")
+        })
         if (program.watch) wrapup.watch(watchCallback(args))
         else wrapup.up(upCallback(args))
     })
@@ -121,6 +183,9 @@ program.command('amd-combined')
         wrapup.scanner.set('sourcemap', args.sourceMap)
         amd.set('ast', args.ast)
         wrapup.withOutput(amd)
+        amd.on('output', function(file){
+            console.warn("The file " + file.grey + " has been written")
+        })
         if (program.watch && !args.output){
             console.error('when using the --watch option, the --output option is required')
             return
@@ -138,15 +203,17 @@ program.command('amd')
         amd.set('output', args.output)
         amd.set('path', args.path)
         wrapup.withOutput(amd)
+        amd.on('output', function(file){
+            console.warn("The file " + file.grey + " has been written")
+        })
         if (program.watch){
             wrapup.watch(function(err){
                 if (err) errorHandler(err, true)
-                else console.log('files written')
             })
         } else {
             wrapup.up(function(err){
                 if (err) errorHandler(err)
-                else console.log('files written')
+                else console.warn("DONE".green.inverse)
             })
         }
     })
@@ -160,13 +227,7 @@ program.outputHelp = function(){
     process.stdout.write(this.helpInformation());
 }
 
-function errorHandler(err, watch){
-    if (watch) console.error(err)
-    else throw err
-}
-
 module.exports = function(process){
-    proc = process
     program.parse(process.argv)
     if (!program.args.length) program.help();
 }
