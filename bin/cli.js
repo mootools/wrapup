@@ -16,7 +16,6 @@ var wrapup = new WrapUp()
 
 var proc
 
-
 program
     .version(json.version)
     .option('-r, --require <path>', 'requires a module. Uses node to resolve modules. If the form namepace=path is used the module will use a namespace')
@@ -46,30 +45,66 @@ program.command('ascii')
 program.command('graph')
     .description('create a graphviz structured dependency graph')
     .option('-o, --output [path]', 'write the output to a file.')
-    .action(function(){
+    .action(function(args){
+        var graph = new Graph()
+        graph.set('output', args.output)
         wrapup
-            .withOutput(new Graph())
+            .withOutput(graph)
             .up(function(err, dot){
-                process.stdout.write(dot)
+                if (err) errorHandler(err)
+                else if (args.output) console.log('file written')
+                else process.stdout.write(dot)
             })
     })
 
 program.command('browser')
     .description('output the combined javascript')
     .option('-o, --output [path]', 'write the output to a file.')
-    .action(function(){
-        wrapup.withOutput(new Browser())
-        if (program.watch) wrapup.watch(write(true))
-        else wrapup.up(write(false))
+    .action(function(args){
+        var browser = new Browser()
+        browser.set('output', args.output)
+        wrapup.withOutput(browser)
+        if (program.watch && !args.output){
+            console.error('when using the --watch option, the --output option is required')
+            return
+        }
+        if (program.watch){
+            wrapup.watch(function(err){
+                if (err) errorHandler(err, true)
+                else console.log('file was written')
+            })
+        } else {
+            wrapup.up(function(err, js){
+                if (err) errorHandler(err)
+                else if (args.output) console.log('file written')
+                else process.stdout.write(js)
+            })
+        }
     })
 
 program.command('amd-combined')
     .description('convert to AMD format and combine the modules into one file')
     .option('-o, --output [path]', 'write the output to a file.')
     .action(function(args){
-        wrapup.withOutput(new AMDOne())
-        if (program.watch) wrapup.watch(write(true))
-        else wrapup.up(write(false))
+        var amd = new AMDOne()
+        amd.set('output', args.output)
+        wrapup.withOutput(amd)
+        if (program.watch && !args.output){
+            console.error('when using the --watch option, the --output option is required')
+            return
+        }
+        if (program.watch){
+            wrapup.watch(function(err){
+                if (err) errorHandler(err, true)
+                else console.log('file was written')
+            })
+        } else {
+            wrapup.up(function(err, js){
+                if (err) errorHandler(err)
+                else if (args.output) console.log('file written')
+                else process.stdout.write(js)
+            })
+        }
     })
 
 program.command('amd')
