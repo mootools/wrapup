@@ -218,7 +218,6 @@ program.command('amd')
         }
     })
 
-
 program.outputHelp = function(){
     // header
     console.warn(" , , , __  __.  _   . . _  ".white)
@@ -227,7 +226,5 @@ program.outputHelp = function(){
     process.stdout.write(this.helpInformation());
 }
 
-module.exports = function(process){
-    program.parse(process.argv)
-    if (!program.args.length) program.help();
-}
+exports = module.exports = program
+exports.wrapup = wrapup
