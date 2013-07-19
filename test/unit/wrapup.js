@@ -65,4 +65,20 @@ describe('WrapUp', function(){
             })
     })
 
+    it('should cleanup the storage', function(done){
+        var wrapup = new WrapUp()
+        var storage = wrapup.storage
+        storage.put('/foo', {full: '/foo', deps: []})
+        storage.put('/bar', {full: '/bar', deps: []})
+        var output = new OutputMock()
+        wrapup
+            .withOutput(output)
+            .require(fixtures + '/e')
+            .up(function(){
+                var modules = storage.keys()
+                expect(modules).to.eql([path.normalize(fixtures + '/e.js')])
+                done()
+            })
+    })
+
 })
