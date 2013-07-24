@@ -5,6 +5,7 @@ var path = require('path')
 var OutputMock = require('./mocks/output')
 
 var WrapUp = require('../../lib/wrapup')
+var Module = require('../../lib/module')
 
 var fixtures = __dirname + '/../fixtures'
 
@@ -68,8 +69,9 @@ describe('WrapUp', function(){
     it('should cleanup the storage', function(done){
         var wrapup = new WrapUp()
         var storage = wrapup.storage
-        storage.put('/foo', {full: '/foo', deps: []})
-        storage.put('/bar', {full: '/bar', deps: []})
+        var foo = new Module('foo')
+        var bar = new Module('bar')
+        storage.put(foo).put(bar)
         var output = new OutputMock()
         wrapup
             .withOutput(output)
@@ -79,6 +81,39 @@ describe('WrapUp', function(){
                 expect(modules).to.eql([path.normalize(fixtures + '/e.js')])
                 done()
             })
+    })
+
+    it('should unrequire some module', function(done){
+        var wrapup  = new WrapUp()
+        var storage = wrapup.storage
+        var output  = new OutputMock()
+        wrapup
+            .withOutput(output)
+            .require(fixtures + '/e')
+            .require(fixtures + '/f/g')
+            .up(function(err){
+                if (err) return done(err)
+
+                var modules = storage.keys()
+                expect(modules).to.eql([
+                   path.normalize(fixtures + '/e.js'),
+                   path.normalize(fixtures + '/f/g.js')
+                ])
+
+                wrapup
+                    .unrequire(fixtures + '/e')
+                    .up(function(err){
+                        if (err) return done(err)
+
+                        var modules = storage.keys()
+                        expect(modules).to.eql([
+                           path.normalize(fixtures + '/f/g.js')
+                        ])
+
+                        done()
+                    })
+            })
+
     })
 
 })

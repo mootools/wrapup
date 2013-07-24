@@ -70,4 +70,80 @@ describe('Scanner', function(){
         })
     })
 
+    it('should find the paths of the requires in the AST object', function(done){
+        createScanner().scan('./up', fixtures + '/b', function(err, module){
+            if (err) return done(err)
+            var requires = module.requires.map(function(req){
+                return {path: req.path, argument: req.argument}
+            })
+            expect(requires).to.eql([
+                {argument: './e',   path: 'body.0.expression'},
+                {argument: './up1', path: 'body.1.declarations.0.init.object'},
+                {argument: './up1', path: 'body.2.declarations.0.init.callee'},
+                {argument: './up1', path: 'body.3.declarations.0.init'},
+                {argument: './up1', path: 'body.4.declarations.0.init.properties.0.value'},
+                {argument: './e',   path: 'body.5.declarations.0.init.left'},
+                {argument: './e',   path: 'body.5.declarations.0.init.right'},
+                {argument: './up1', path: 'body.6.expression.right.callee'}
+            ])
+            done()
+        })
+    })
+
+    describe('rescan', function(){
+
+        var getMap  = function(storage){
+            return storage.keys().map(function(file){
+                var mod = storage.get(file)
+                return {uid: mod.uid, full: file}
+            })
+        }
+
+        it('should not change the result after a second scan', function(done){
+            var storage = new Storage()
+            var scanner = new Scanner(new Resolver(), storage)
+            scanner.scan('./d', fixtures + '/b', function(err, module){
+                if (err) return done(err)
+                var map = getMap(storage)
+                scanner.scan('./d', fixtures + '/b', function(err, module){
+                    var map2 = getMap(storage)
+                    expect(map).to.eql(map2)
+                    done()
+                })
+            })
+        })
+
+        it('should not change the result after invalidating a result', function(done){
+            var storage = new Storage()
+            var scanner = new Scanner(new Resolver(), storage)
+            scanner.scan('./d', fixtures + '/b', function(err, module){
+                if (err) return done(err)
+                var map = getMap(storage)
+                storage.invalidate(path.normalize(fixtures + '/e.js'))
+                scanner.scan('./e', fixtures + '/b', function(err, module){
+                    var map2 = getMap(storage)
+                    expect(map).to.eql(map2)
+                    done()
+                })
+            })
+
+        })
+
+        it('should not change the result after removing a result', function(done){
+            var storage = new Storage()
+            var scanner = new Scanner(new Resolver(), storage)
+            scanner.scan('./d', fixtures + '/b', function(err, module){
+                if (err) return done(err)
+                var map = getMap(storage)
+                storage.remove(path.normalize(fixtures + '/e.js'))
+                scanner.scan('./e', fixtures + '/b', function(err, module){
+                    var map2 = getMap(storage)
+                    expect(map).to.eql(map2)
+                    done()
+                })
+            })
+        })
+
+    })
+
 })

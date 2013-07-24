@@ -15,7 +15,7 @@ describe('output/ASCII', function(){
         a.dependencies = [new Module('b'), new Module('c'), new Module('d')]
         e.namespace = 'eee'
         e.dependencies = [new Module('f'), new Module('g')]
-        storage.put('a', a).put('e', e)
+        storage.put(a).put(e)
 
         var output = new Output()
         output.withStorage(storage)
