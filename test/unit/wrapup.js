@@ -6,6 +6,7 @@ var OutputMock = require('./mocks/output')
 
 var WrapUp = require('../../lib/wrapup')
 var Module = require('../../lib/module')
+var errors = require('../../lib/errors')
 
 var fixtures = __dirname + '/../fixtures'
 
@@ -53,6 +54,7 @@ describe('WrapUp', function(){
             .require('ee', 'b')
             .up(function(err){
                 expect(err).to.be.ok()
+                expect(err).to.be.a(errors.NamespaceError)
                 done()
             })
     })
@@ -62,6 +64,7 @@ describe('WrapUp', function(){
         wrapup
             .up(function(err){
                 expect(err).to.be.ok()
+                expect(err).to.be.a(errors.EmptyError)
                 done()
             })
     })
@@ -114,6 +117,29 @@ describe('WrapUp', function(){
                     })
             })
 
+    })
+
+    it('should reparse a file again after it was invalidated', function(done){
+        var wrapup  = new WrapUp()
+        var storage = wrapup.storage
+        var output  = new OutputMock()
+        var e = path.normalize(fixtures + '/e.js')
+        wrapup
+            .withOutput(output)
+            .require(fixtures + '/d') // has require('./e')
+            .up(function(err){
+                if (err) return done(err)
+
+                storage.invalidate(e)
+                expect(storage.get(e).invalid).to.be(true)
+
+                wrapup.up(function(err){
+                    if (err) return done(err)
+                    expect(storage.get(e).invalid).to.be(false)
+                    done()
+                })
+
+            })
     })
 
 })
