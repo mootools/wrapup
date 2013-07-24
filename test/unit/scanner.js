@@ -20,27 +20,27 @@ describe('Scanner', function(){
             if (err) return done(err)
             expect(module.full).to.equal(path.normalize(fixtures + '/a.js'))
             expect(module.src).to.be.ok()
-            expect(module.deps.length).to.be(2)
+            expect(module.dependencies.length).to.be(2)
             expect(module.requires.length).to.be(2)
             done()
         })
     })
 
-    it('should put "null" in module.deps if the dependency cannot be resolved', function(done){
+    it('should put "null" in module.dependencies if the dependency cannot be resolved', function(done){
         createScanner().scan('./a', fixtures + '/b', function(err, module){
             if (err) return done(err)
-            expect(module.deps.length).to.be(2)
-            expect(module.deps[0]).to.be(null)
-            expect(module.deps[1]).to.be(null)
+            expect(module.dependencies.length).to.be(2)
+            expect(module.dependencies[0]).to.be(null)
+            expect(module.dependencies[1]).to.be(null)
             done()
         })
     })
 
-    it('should put the module object in module.deps if the dependency can be resolved', function(done){
+    it('should put the module object in module.dependencies if the dependency can be resolved', function(done){
         createScanner().scan('./d', fixtures + '/b', function(err, module){
             if (err) return done(err)
-            expect(module.deps.length).to.be(1)
-            expect(module.deps[0].full).to.be(path.normalize(fixtures + '/e.js'))
+            expect(module.dependencies.length).to.be(1)
+            expect(module.dependencies[0].full).to.be(path.normalize(fixtures + '/e.js'))
             done()
         })
     })
@@ -58,6 +58,16 @@ describe('Scanner', function(){
             done()
         })
 
+    })
+
+    it('should fill the dependents array', function(done){
+        createScanner().scan('./d', fixtures + '/b', function(err, module){
+            if (err) return done(err)
+            expect(module.full).to.equal(path.normalize(fixtures + '/d.js'))
+            expect(module.dependencies[0].dependents.length).to.be(1)
+            expect(module.dependencies[0].dependents[0] == module).to.be.ok()
+            done()
+        })
     })
 
 })

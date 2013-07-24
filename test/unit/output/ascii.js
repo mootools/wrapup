@@ -12,9 +12,9 @@ describe('output/ASCII', function(){
 
         var storage = new Storage()
         var a = new Module('a'), e = new Module('e')
-        a.deps = [new Module('b'), new Module('c'), new Module('d')]
+        a.dependencies = [new Module('b'), new Module('c'), new Module('d')]
         e.namespace = 'eee'
-        e.deps = [new Module('f'), new Module('g')]
+        e.dependencies = [new Module('f'), new Module('g')]
         storage.put('a', a).put('e', e)
 
         var output = new Output()
