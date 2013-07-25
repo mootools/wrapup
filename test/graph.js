@@ -1,9 +1,10 @@
 "use strict";
 
-var fs     = require('fs')
-var assert = require('assert')
-var passed = require('./run').passed
-var diff   = require('ansidiff')
+var assert   = require('assert')
+var test     = require('./run')
+var passed   = test.passed
+var readFile = test.readFile
+var diff     = require('ansidiff')
 
 var wrup = require('../lib/main')({
     graph: true
@@ -11,7 +12,7 @@ var wrup = require('../lib/main')({
 
 wrup.require(__dirname + '/fixtures/b').up(function(err, actual){
     assert.ifError(err)
-    var should = fs.readFileSync(__dirname + '/output/graph.dot', 'utf-8')
+    var should = readFile(__dirname + '/output/graph.dot')
     try {
         assert.equal(should, actual, "the generated dot should be equal")
     } catch (e){

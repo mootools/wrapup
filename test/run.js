@@ -17,6 +17,12 @@ var relative = function(file){
     return path.relative(process.cwd(), file)
 }
 
+exports.readFile = function(file){
+    var str = fs.readFileSync(file, 'utf-8')
+    str = str.replace(/\r\n/g, '\n')
+    return str
+}
+
 exports.passed = function(test){
     console.log(("✔ " + test + " test passed").green)
 }
