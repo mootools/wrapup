@@ -30,7 +30,7 @@ var tasks = []
 
 forOwn(commands, function(test, command){
     tasks.push(function(callback){
-        exec('./bin/wrup.js ' + command, {cwd: __dirname + '/../'}, test(callback, command))
+        exec('node ./bin/wrup.js ' + command, {cwd: __dirname + '/../'}, test(callback, command))
     })
 })
 
