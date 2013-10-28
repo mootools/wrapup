@@ -3,7 +3,7 @@
 ## WrapUp?
 
  * WrapUp compiles CommonJS 1.0 modules for the browser.
- * WrapUp does not try to have a working `require` implementation for the browser, infact the loader WrapUp uses is [incredibly simple](https://github.com/mootools/wrapup/blob/master/includes/wrapper.js).
+ * WrapUp does not try to have a working `require` implementation for the browser, infact the loader WrapUp uses is [incredibly simple](https://github.com/mootools/wrapup/blob/master/includes/browser-wrapper.js).
  * WrapUp ignores duplicates that may be present when using npm to install packages.
  * WrapUp supports building multiple versions of the same package.
  * WrapUp supports circular module dependencies.
@@ -62,24 +62,23 @@ namespace, the module will be required without being assigned. A bit like doing
 #### cli
 
 ``` bash
-wrup --require colors colors --require someName ./path/to/otherModule --require someOtherPackage
+wrup browser --require colors colors --require someName ./path/to/otherModule --require someOtherPackage
 ```
 
 #### js
 
 ```js
-var wrup = require("wrapup")() // require + instantiate
+var wrup = require("wrapup")(/*...options...*/) // require + instantiate
 
 wrup.require("colors", "colors")
     .require("someName", "./path/to/otherModule")
     .require("someOtherPackage")
-    .options(/*...options...*/)
     .up(function(err, js){
         console.log(js)
     })
 ```
 
-the above would let you access colors and someName, while having
+The above would let you access colors and someName, while having
 someOtherPackage simply required without being assigned to any variable. The
 ouput code assigning variables would look like this:
 
@@ -105,24 +104,25 @@ Instead of using the `.up()` method, the `.watch()` method is used.
 
 ```javascript
 var wrup = require("wrapup")() // require + instantiate
-wrup.require("y", "./moduley.js").watch()
-
-wrup.on("data", function(js){
-    fs.writeFile("path/to/wherever", js)
-})
+wrup.require("y", "./moduley.js")
+    .watch(function(err, js){
+        fs.writeFile("path/to/wherever", js)
+    })
 
 wrup.on("change", function(file){
     console.log(file + " changed.")
 })
 ```
 
-In the above example, whenever module y and any module required by module y
+In the above example, whenever module `y` and any module required by module `y`
 changes, .up() is called again. The `data` event is fired whenever WrapUp
 builds, either be a direct .up() call or an .up() call triggered by a changed
-file. The `change` event is fired whenever `watch` is set to true and one of the
-source files changes.
+file. The `change` event is fired whenever `watch` is set to true and one of
+the source files changes.
 
 ### options
+
+
 
 Set some options for the output.
 
