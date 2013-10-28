@@ -6,7 +6,7 @@ var assert    = require('assert')
 var path      = require('path')
 var escodegen = require('escodegen')
 var diff      = require('ansidiff')
-require("colors")
+var chalk     = require("chalk")
 
 var parse = function(file){
     var code = fs.readFileSync(file, "utf-8")
@@ -24,7 +24,7 @@ exports.readFile = function(file){
 }
 
 exports.passed = function(test){
-    console.log(("✔ " + test + " test passed").green)
+    console.log(chalk.green("✔ " + test + " test passed"))
 }
 
 exports.testFiles = function(test, result, should, transformResult, transformShould){
