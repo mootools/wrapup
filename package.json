@@ -30,10 +30,10 @@
   },
   "dependencies": {
     "async": "0.2",
-    "colors": "*",
+    "chalk": "0.3",
     "commander": "2.0",
-    "prime": "0.2",
-    "esprima": "1.0",
+    "prime": "0.3",
+    "esprima": "~1.0.4",
     "escodegen": "0.0.x",
     "esmangle": "0.0.x",
     "graphviz": "0.0.x",

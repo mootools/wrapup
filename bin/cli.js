@@ -2,7 +2,7 @@
 
 var WrapUp  = require("../lib/wrapup")
 var program = require("commander")
-var colors  = require("colors")
+var chalk   = require("chalk")
 var json    = require("../package")
 var path    = require("path")
 
@@ -20,44 +20,44 @@ function errorHandler(err, watch){
         case "graphviz": break
 
         case "js":
-            dmessage = "on " + err.module.yellow +
-                " required by " + err.source.yellow +
+            dmessage = "on " + chalk.yellow(err.module) +
+                " required by " + chalk.yellow(err.source) +
                 " at line " + err.line + ", column " + err.col
             message = err.module + " on line " + err.line + ", column " + err.col
             break
 
         case "resolve":
-            dmessage = "on module " + err.module.yellow + " required by " + err.source.yellow
+            dmessage = "on module " + chalk.yellow(err.module) + " required by " + chalk.yellow(err.source)
             message  = err.module + " < " + err.source
             break
 
         case "empty": break
 
         case "namespace":
-            dmessage = err.namespace.yellow + " already in use by " + err.module.yellow
+            dmessage = chalk.yellow(err.namespace) + " already in use by " + chalk.yellow(err.module)
             message = err.namespace + " in use by " + err.module
             break
 
         case "native":
-            dmessage = "on module " + err.module.yellow + " required by " + err.source.yellow
+            dmessage = "on module " + chalk.yellow(err.module) + " required by " + chalk.yellow(err.source)
             message = "on module " + err.module + " required by " + err.source
             break
 
         case "not-in-path":
-            dmessage = "on module " + err.module.yellow + " required by " +
-                err.source.yellow + ". File should be in " + err.path.yellow
+            dmessage = "on module " + chalk.yellow(err.module) + " required by " +
+                chalk.yellow(err.source) + ". File should be in " + chalk.yellow(err.path)
             message = "on module " + err.module + " required by " +
                 err.source + ". File should be in " + err.path
             break
 
         case "out-of-scope":
-            dmessage = "on file " + err.file.yellow
+            dmessage = "on file " + chalk.yellow(err.file)
             message = "on file " + err.file
             break
 
     }
 
-    console.error(title.red.inverse + (dmessage ? ": " + dmessage : ""))
+    console.error(chalk.red.inverse(title) + (dmessage ? ": " + dmessage : ""))
 
     if (!watch) process.exit(1)
 }
@@ -74,7 +74,7 @@ function upCallback(args){
     return function(err, str){
         if (err) errorHandler(err)
         else if (!args.output) console.log(str)
-        console.warn("DONE".green.inverse)
+        console.warn(chalk.green.inverse("DONE"))
     }
 }
 
@@ -213,16 +213,16 @@ program.command('amd')
         } else {
             wrapup.up(function(err){
                 if (err) errorHandler(err)
-                else console.warn("DONE".green.inverse)
+                else console.warn(chalk.green.inverse("DONE"))
             })
         }
     })
 
 program.outputHelp = function(){
     // header
-    console.warn(" , , , __  __.  _   . . _  ".white)
-    console.warn("(_(_/_/ (_(_/|_/_)_(_/_/_)_".grey)
-    console.warn("              /       /  " + json.version.white + "\n")
+    console.warn(chalk.grey(" , , , __  __.  _   . . _  "))
+    console.warn(chalk.grey("(_(_/_/ (_(_/|_/_)_(_/_/_)_"))
+    console.warn(chalk.grey("              /       /  " + json.version) + "\n")
     process.stdout.write(this.helpInformation());
 }
 

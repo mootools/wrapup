@@ -137,6 +137,7 @@ describe('Scanner', function(){
                 var map = getMap(storage)
                 storage.remove(path.normalize(fixtures + '/e.js'))
                 scanner.scan('./e', fixtures + '/b', function(err, module){
+                    if (err) return done(err)
                     var map2 = getMap(storage)
                     expect(map).to.eql(map2)
                     done()
