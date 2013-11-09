@@ -20,6 +20,7 @@ wrapup.scanner.on('warn', function(err){
 program
     .version(json.version)
     .option('-r, --require <path>', 'requires a module. Uses node to resolve modules. If the form namepace=path is used the module will use a namespace')
+    .option('-t, --transform <module>', 'requires a module for transforming source code of modules')
     .option('-w, --watch', 'watch changes to every resolved module and wraps up')
     .option('--in-path <path>', 'all required files should be in this path')
 
@@ -27,6 +28,11 @@ program.on('require', function(option){
     var parts = option.split('=')
     if (parts.length > 1) wrapup.require(parts[0], parts[1])
     else wrapup.require(option)
+})
+
+program.on('transform', function(option){
+    if (option.charAt(0) == '.') option = process.cwd() + '/' + option
+    wrapup.scanner.addTransform(require(option))
 })
 
 program.on('in-path', function(option){
