@@ -2,6 +2,7 @@
 
 var Graph   = require('../lib/output/graph')
 var error   = require('./errorHandler')
+var chalk   = require('chalk')
 
 module.exports = function(program, wrapup){
     program.command('graph')
@@ -11,7 +12,7 @@ module.exports = function(program, wrapup){
             var graph = new Graph()
             graph.set('output', args.output)
             graph.on('output', function(file){
-                console.warn("The file " + file.grey + " has been written")
+                console.warn("The file " + chalk.grey(file) + " has been written")
             })
             wrapup
                 .withOutput(graph)

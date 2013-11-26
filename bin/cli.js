@@ -1,16 +1,16 @@
 "use strict";
 
-var WrapUp  = require('../lib/wrapup')
+var path    = require('path')
 var program = require('commander')
 var chalk   = require('chalk')
+var WrapUp  = require('../lib/wrapup')
 var json    = require('../package')
-var path    = require('path')
 var error   = require('./errorHandler')
 
 var wrapup = new WrapUp()
 
 wrapup.on('change', function(file){
-    console.warn("=>".blue.inverse + " " + path.relative(process.cwd(), file).grey + " was changed")
+    console.warn(chalk.blue.inverse("=>") + " " + chalk.grey(path.relative(process.cwd(), file)) + " was changed")
 })
 
 wrapup.scanner.on('warn', function(err){

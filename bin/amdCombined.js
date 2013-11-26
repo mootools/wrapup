@@ -2,6 +2,7 @@
 
 var AMDOne = require('../lib/output/amdOneFile')
 var error  = require('./errorHandler')
+var chalk  = require('chalk')
 
 module.exports = function(program, wrapup){
     program.command('amd-combined')
@@ -25,7 +26,7 @@ module.exports = function(program, wrapup){
             amd.set('ast', args.ast)
             wrapup.withOutput(amd)
             amd.on('output', function(file){
-                console.warn("The file " + file.grey + " has been written")
+                console.warn("The file " + chalk.grey(file) + " has been written")
             })
             if (program.watch && !args.output){
                 console.error('when using the --watch option, the --output option is required')

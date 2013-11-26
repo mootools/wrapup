@@ -2,6 +2,7 @@
 
 var Browser = require('../lib/output/browser')
 var error   = require('./errorHandler')
+var chalk   = require('chalk')
 
 module.exports = function(program, wrapup){
     var browser = program.command('browser')
@@ -29,7 +30,7 @@ module.exports = function(program, wrapup){
                 return
             }
             browser.on('output', function(file){
-                console.warn("The file " + file.grey + " has been written")
+                console.warn("The file " + chalk.grey(file) + " has been written")
             })
             if (program.watch) wrapup.watch(error.watchCallback(args))
             else wrapup.up(error.upCallback(args))
