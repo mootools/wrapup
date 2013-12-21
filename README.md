@@ -122,8 +122,6 @@ the source files changes.
 
 ### options
 
-
-
 Set some options for the output.
 
 ```js
@@ -132,52 +130,51 @@ wrup.options({
 })
 ```
 
- - `globalize` define the global scope where named modules are attached to.
-   By default it uses global var statements.
- - `compress` if set to true, will compress the resulting javascript file using
-   uglify-js. Defaults to false.
- - `output` Used to specify an output file. defaults to stdout. When using the
-   AMD output mode it is required to be the output directory.
- - `inPath` (cli: `--in-path`) Enforce that all modules are in a specified path.
-   This helps security that a random file cannot require any file on the user's
-   file system.
- - `path` (cli: `--path`) When using the AMD output mode, this will trim the
-   first parts of the path, so `-r ./foo/bar/temp --path ./foo/bar` will just
-   result in a `temp.js` file in the `--output` directory.
- - `sourcemap` (cli: `--source-map`) Specify an output file where to generate
-   source map.
- - `sourcemapURL` (cli: `--source-map-url`) `//@ sourceMappingURL` value, URL to
-   the saved sourcemap file.
- - `sourcemapRoot` (cli: `--source-map-root`) The path to the original source to
-   be included in the source map.
- - `ast` the output is a JSON object of the AST, instead of JavaScript. Can be
-   used as uglifyjs input, using `uglifyjs --spidermonkey`.
+- `globalize` define the global scope where named modules are attached to.
+  By default it uses global var statements.
+- `compress` if set to true, will compress the resulting javascript file using
+  uglify-js. Defaults to false.
+- `output` Used to specify an output file. Defaults to stdout.
+- `inPath` (cli: `--in-path`) Enforce that all modules are in a specified path.
+  This helps security that a random file cannot require any file on the user's
+  file system.
+- `path` (cli: `--path`) When using the AMD output mode, this will trim the
+  first parts of the path, so `-r ./foo/bar/temp --path ./foo/bar` will just
+  result in a `temp.js` file in the `--output` directory.
+- `sourcemap` (cli: `--source-map`) Specify an output file where to generate
+  source map.
+- `sourcemapURL` (cli: `--source-map-url`) `//@ sourceMappingURL` value, URL to
+  the saved sourcemap file.
+- `sourcemapRoot` (cli: `--source-map-root`) The path to the original source to
+  be included in the source map.
+- `ast` the output is a JSON object of the AST, instead of JavaScript. Can be
+  used as uglifyjs input, using `uglifyjs --spidermonkey`.
 
 #### cli
 
-Additional cli options:
+cli commands:
 
- - `--amd` when using the `--amd`, it will convert CommonJS modules to AMD
-   modules. The `--output` option should be a directory.
- - `--amd-one-file` will create a AMD-style optimized file. This is a file
-   with multiple `define()` calls for each module. It provides a global
-   `require()` (if not yet defined before).
- - `--digraph` generate a [dot](http://www.graphviz.org/) output. If you've
-   installed graphviz, you can use the `--output` option, like
-   `--output graph.png`
+```
+    browser [options]       output the combined javascript
+    ascii                   list the dependencies as a tree
+    graph [options]         create a graphviz structured dependency graph
+    amd-combined [options]  convert to AMD format and combine the modules into one file
+    amd [options]           convert the modules into the AMD format
+```
+
+**notes:**
+
+- For `amd` the output option should be a directory
+- For `graph` to generate an actual image, you need
+  [dot](http://www.graphviz.org/) output. If you've installed graphviz, you can
+  use the `--output` option, like `--output graph.png`
 
 #### js
 
 ```javascript
 wrup.require(/*...*/)
     .require(/*...*/)
-    .options({
-        globalize: "MyNameSpace",
-        compress: true,
-        sourcemap: "./somefile.map"
-    }).on("data", function(js){
-        fs.writeFile("./somefile.js", js)
-    }).up()
+    .up()
 ```
 
 ### Using Source Maps
@@ -197,7 +194,7 @@ The WrapUp output can be piped into UglifyJS if more compression options are
 desired. For example using the `--define` option to set global definitions.
 
 ``` bash
-wrup -r ./main.js --source-map ./main.map \
+wrup browser -r ./main.js --source-map ./main.map \
      | uglify -d DEV=false --compress --mangle --output ./main.min.js \
               --source-map main.map --in-source-map main.map
 ```
@@ -207,24 +204,7 @@ can be piped to UglifyJS as an Abstract Syntax Tree JSON. This saves UglifyJS
 parsing the generated WrapUp JavaScript.
 
 ```bash
-wrup -r ./main --ast | uglifyjs --spidermonkey -c -m --output compressed.js
-```
-
-### Stream and pipe
-
-WrapUp implements Node [Stream](http://nodejs.org/api/stream.html#stream_readable_stream)
-which means it is possible to pipe the WrapUp output to other writable streams,
-like [fs.WriteStream](http://nodejs.org/api/fs.html#fs_fs_writestream),
-process.stdout or
-[http.ServerResponse](http://nodejs.org/api/http.html#http_class_http_serverresponse).
-
-```js
-http.createServer(function(req, res){
-    var wrup = wrapup()
-    wrup.require('prime')
-    wrup.pipe(res)
-    wrup.up()
-})
+wrup browser -r ./main --ast | uglifyjs --spidermonkey -c -m --output compressed.js
 ```
 
 ### Examples
@@ -233,39 +213,42 @@ http.createServer(function(req, res){
 
 ``` bash
 # simple building a file
-wrup --require ./main.js --output built.js
+wrup browser --require ./main.js --output built.js
 
 # compressing the file
-wrup --require ./main.js --output built.js --compress
+wrup browser --require ./main.js --output built.js --compress
 
 # watching, and use another global object, so MyNameSpace.modulename == module.exports of main.js
-wrup --require modulename ./main.js --globalize MyNameSpace --compress --output path/to/file.js --watch
+wrup browser -r modulename ./main.js --globalize MyNameSpace --compress -o path/to/file.js --watch
 
 # export modules in the global scope with "var" statements
 # this will create a "var moofx = ..." statement
-wrup -r moofx ./moofx
+wrup browser -r moofx ./moofx
 
 # building AMD
-wrup --require ./main.js --amd --output ./converted-to-amd
+wrup amd --require ./main.js --output ./folder-for-converted-to-amd
 
 # building AMD with the --path option
-wrup --require ./path/to/files/file.js --path ./path/to/files --output ./amd --amd
+wrup amd --require ./path/to/files/file.js --path ./path/to/files --output ./amd
 
 # create a single optimized AMD-style using define() functions
-wrup --require ./main.js --amd-one-file
+wrup amd-combined --require ./main.js
 
 # piping the AST JSON into uglifyjs
-wrup --require ./main.js --ast | uglifyjs --spidermonkey -c -m
+wrup browser --require ./main.js --ast | uglifyjs --spidermonkey -c -m
 
 # source maps
-wrup -r ./main.js --output test.js --source-map test.map
+wrup browser -r ./main.js --output test.js --source-map test.map
 
 # generating a visual dependency graph
-wrup -r ./main --digraph
+wrup graph -r ./main
 # this requires that graphviz is installed
-wrup -r ./main --digraph --output graph.png
+wrup graph -r ./main --output graph.png
 # or pipe it into the "dot" command line tool
-wrup -r ./main --digraph | dot -Tpng -o graph.png
+wrup graph -r ./main | dot -Tpng -o graph.png
+
+# show an plain text dependency tree
+wrup ascii -r ./main
 ```
 
 #### JavaScript
