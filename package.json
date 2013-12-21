@@ -42,7 +42,8 @@
   },
   "devDependencies": {
     "expect.js": "0.2",
-    "mocha": "1.12"
+    "mocha": "1.12",
+    "through": "~2.3.4"
   },
   "optionalDependencies": {},
   "engines": {

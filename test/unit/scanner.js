@@ -2,6 +2,7 @@
 
 var expect = require('expect.js')
 var path = require('path')
+var through = require('through')
 
 var Scanner = require('../../lib/scanner')
 var Resolver = require('../../lib/resolver')
@@ -145,6 +146,57 @@ describe('Scanner', function(){
             })
         })
 
+    })
+
+    describe('transform pre (src)', function(){
+        it('should transform some source code with a src transform', function(done){
+            var scanner = createScanner()
+            scanner.addTransform({
+                src: function(module, callback){
+                    module.src = module.src.replace("'e'", "'d'")
+                    callback(null, module)
+                }
+            })
+            scanner.scan('./e', fixtures + '/a', function(err, module){
+                expect(module.src).to.eql("module.exports = 'd'\n")
+                done()
+            })
+        })
+    })
+
+    describe('transform (browserify)', function(){
+        it('should transform some source code with a src transform', function(done){
+            var scanner = createScanner()
+            scanner.addTransform(function(file){
+                var data = '';
+                return through(function write(buf){
+                    data += buf
+                }, function end(){
+                    this.queue(data.replace("'e'", "'d'"))
+                    this.queue(null)
+                })
+            })
+            scanner.scan('./e', fixtures + '/a', function(err, module){
+                expect(module.src).to.eql("module.exports = 'd'\n")
+                done()
+            })
+        })
+    })
+
+    describe('transform post (ast)', function(){
+        it('should transform the AST of a module', function(done){
+            var scanner = createScanner()
+            scanner.addTransform({
+                ast: function(module, callback){
+                    module.ast.body[0].expression.right.value = 'd'
+                    callback(null, module)
+                }
+            })
+            scanner.scan('./e', fixtures + '/a', function(err, module){
+                expect(module.ast.body[0].expression.right.value).to.eql('d')
+                done()
+            })
+        })
     })
 
 })
