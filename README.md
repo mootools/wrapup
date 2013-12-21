@@ -127,8 +127,11 @@ the source files changes.
 Set some options for the output.
 
 ```js
-wrup.options({
-    globalize: "MyNamespace"
+var wrapup = require('wrapup')
+wrapup({
+    globalize: "MyNamespace",
+    compress: true
+    // more options ...
 })
 ```
 
