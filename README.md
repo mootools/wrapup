@@ -13,6 +13,8 @@
 [![Build Status](https://secure.travis-ci.org/mootools/wrapup.png)](https://travis-ci.org/mootools/wrapup)
 [![Dependency Status](https://gemnasium.com/mootools/wrapup.png)](https://gemnasium.com/mootools/wrapup)
 
+[![](https://nodei.co/npm/wrapup.png)](https://npmjs.org/package/wrapup)
+
 ## Installation
 
 WrapUp is installed via npm:
