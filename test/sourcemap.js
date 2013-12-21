@@ -2,21 +2,16 @@
 
 var assert = require('assert')
 var fs     = require('fs')
-var wrup   = require('../lib/main')()
 var test   = require('./run').test
 
 var root = "http://localhost:8000"
 var url = "http://localhost:8000/test/output/sourcemap.result.map"
 
-wrup.options({
+var wrup = require('../lib/main')({
     output: __dirname + "/output/sourcemap.result.js",
     sourcemap: __dirname + "/output/sourcemap.result.map",
     sourcemapRoot: root,
     sourcemapURL: url
-})
-
-wrup.on("error", function(err){
-    assert.fail(err, undefined, "no errors should occur")
 })
 
 wrup.require(__dirname + '/fixtures/up').up(function(err, code){

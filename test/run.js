@@ -6,7 +6,7 @@ var assert    = require('assert')
 var path      = require('path')
 var escodegen = require('escodegen')
 var diff      = require('ansidiff')
-require("colors")
+var chalk     = require("chalk")
 
 var parse = function(file){
     var code = fs.readFileSync(file, "utf-8")
@@ -17,8 +17,14 @@ var relative = function(file){
     return path.relative(process.cwd(), file)
 }
 
+exports.readFile = function(file){
+    var str = fs.readFileSync(file, 'utf-8')
+    str = str.replace(/\r\n/g, '\n')
+    return str
+}
+
 exports.passed = function(test){
-    console.log(("✔ " + test + " test passed").green)
+    console.log(chalk.green("✔ " + test + " test passed"))
 }
 
 exports.testFiles = function(test, result, should, transformResult, transformShould){
@@ -48,7 +54,7 @@ if (process.argv.length > 2){
     require('./' + process.argv[2])
 } else {
     require('./up')
-    require('./pipe')
+//    require('./pipe')
     require('./globalize')
     require('./notresolved')
     require('./compress')

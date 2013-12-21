@@ -1,29 +1,23 @@
 "use strict";
 
-var fs     = require('fs')
-var assert = require('assert')
-var wrup   = require('../lib/main')()
-var passed = require('./run').passed
+var assert   = require('assert')
+var test     = require('./run')
+var passed   = test.passed
+var readFile = test.readFile
+var diff     = require('ansidiff')
 
-var stream = fs.createWriteStream(__dirname + '/output/graph.result.dot')
-
-wrup.options({
-    //output: __dirname + '/output/graph-out.result.png'
+var wrup = require('../lib/main')({
+    graph: true
 })
 
-wrup.pipe(stream)
-
-wrup.on("error", function(err){
-    assert.fail(err, undefined, "no errors should occur")
-})
-
-wrup.require(__dirname + '/fixtures/b').graph(function(err, actual){
+wrup.require(__dirname + '/fixtures/b').up(function(err, actual){
     assert.ifError(err)
-    var should = fs.readFileSync(__dirname + '/output/graph.dot')
-    assert.equal(should, actual, "the generated dot should be equal")
-    //var stat = fs.statSync(__dirname + '/output/graph-out.result.png')
-    //assert.ok(stat.size > 0)
+    var should = readFile(__dirname + '/output/graph.dot')
+    try {
+        assert.equal(should, actual, "the generated dot should be equal")
+    } catch (e){
+        console.log(diff.words(should, actual));
+        throw e
+    }
     passed("graph")
 })
-
-

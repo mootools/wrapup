@@ -1,7 +1,7 @@
 digraph G {
-  "test/fixtures/b.js";
-  "test/fixtures/e.js";
-  "test/fixtures/a.js";
-  "test/fixtures/b.js" -> "test/fixtures/e.js";
-  "test/fixtures/b.js" -> "test/fixtures/a.js";
+  "test/fixtures/b";
+  "test/fixtures/e";
+  "test/fixtures/a";
+  "test/fixtures/b" -> "test/fixtures/e";
+  "test/fixtures/b" -> "test/fixtures/a";
 }

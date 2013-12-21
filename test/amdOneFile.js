@@ -5,14 +5,9 @@ var wrapup = require('../lib/main')
 var util   = require('../lib/util')
 var test   = require('./run').test
 
-var wrup = wrapup()
-
-wrup.options({
+var wrup = wrapup({
+    amdOneFile: true,
     output: __dirname + "/output/amdOneFile.result.js"
-})
-
-wrup.on("error", function(err){
-    assert.fail(err, undefined, "no errors should occur")
 })
 
 util.getAST('amdOneFile-wrapper')(function(err, wrapper){
@@ -21,7 +16,7 @@ util.getAST('amdOneFile-wrapper')(function(err, wrapper){
 
     wrapper = util.clone(wrapper)
 
-    wrup.require(__dirname + '/fixtures/up').amdOneFile(function(err){
+    wrup.require(__dirname + '/fixtures/up').up(function(err){
         assert.ifError(err)
         test('amdOneFile', null, function(should){
             wrapper.body.push.apply(wrapper.body, should.body)
