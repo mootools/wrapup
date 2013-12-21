@@ -44,6 +44,12 @@ describe('Resolver', function(){
         expect(resolved2).to.equal(modulePath2)
     })
 
+    it('should return null if the module cannot be found', function(){
+        var resolver = new Resolver()
+        var resolved = resolver.resolve('./not-existing', __dirname + '../fixtures/b')
+        expect(resolved).to.be(null)
+    })
+
 })
 
 

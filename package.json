@@ -38,7 +38,8 @@
     "esmangle": "0.0.x",
     "graphviz": "0.0.x",
     "mkdirp": "0.3",
-    "ansidiff": "1.0"
+    "ansidiff": "1.0",
+    "require-relative": "~0.8.7"
   },
   "devDependencies": {
     "expect.js": "0.2",
