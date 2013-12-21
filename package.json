@@ -38,12 +38,12 @@
     "esmangle": "0.0.x",
     "graphviz": "0.0.x",
     "mkdirp": "0.3",
-    "ansidiff": "1.0",
     "require-relative": "~0.8.7"
   },
   "devDependencies": {
     "expect.js": "0.2",
     "mocha": "1.12",
+    "ansidiff": "1.0",
     "through": "~2.3.4"
   },
   "optionalDependencies": {},
