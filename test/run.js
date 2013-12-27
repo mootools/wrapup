@@ -64,4 +64,5 @@ if (process.argv.length > 2){
     require('./wrup')
     require('./js-error')
     require('./amdOneFile')
+    require('./amd')
 }

@@ -4,20 +4,15 @@ var assert = require('assert')
 var wrapup = require('../lib/main')
 var test   = require('./run').testFiles
 
-var wrup = wrapup()
-
-wrup.options({
+var wrup = wrapup({
     output: __dirname + "/output/amd-result",
-    path: __dirname + "/fixtures"
+    path: __dirname + "/fixtures",
+    amd: true
 })
 
-wrup.on("error", function(err){
-    assert.fail(err, undefined, "no errors should occur")
-})
-
-wrup.require(__dirname + '/fixtures/h').amd(function(err){
+wrup.require(__dirname + '/fixtures/h').up(function(err){
     assert.ifError(err)
     test('amd', __dirname + '/output/amd-result/h.js', __dirname + '/output/amd/h.js')
     test('amd', __dirname + '/output/amd-result/f/g.js', __dirname + '/output/amd/f/g.js')
-    test('amd', __dirname + '/output/amd-result/f/i.js', __dirname + '/output/amd/f/i.js')
+    test('amd', __dirname + '/output/amd-result/f/index.js', __dirname + '/output/amd/f/index.js')
 })

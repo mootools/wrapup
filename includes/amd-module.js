@@ -1,1 +1,1 @@
-define(['module', 'exports'], function(module, exports){})
+define(['exports', 'module'], function(exports, module){})
