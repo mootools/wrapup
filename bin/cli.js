@@ -1,11 +1,12 @@
 "use strict";
 
-var path    = require('path')
-var program = require('commander')
-var chalk   = require('chalk')
-var WrapUp  = require('../lib/wrapup')
-var json    = require('../package')
-var error   = require('./errorHandler')
+var path     = require('path')
+var program  = require('commander')
+var chalk    = require('chalk')
+var relative = require('require-relative').resolve
+var WrapUp   = require('../lib/wrapup')
+var json     = require('../package')
+var error    = require('./errorHandler')
 
 var wrapup = new WrapUp()
 
@@ -22,6 +23,7 @@ program
     .option('-r, --require <path>', 'requires a module. Uses node to resolve modules. If the form namepace=path is used the module will use a namespace')
     .option('-t, --transform <module>', 'requires a module for transforming source code of modules')
     .option('-w, --watch', 'watch changes to every resolved module and wraps up')
+    .option('-t, --transform', 'a module that can transform source code or ASTs')
     .option('--in-path <path>', 'all required files should be in this path')
 
 program.on('require', function(option){
@@ -31,8 +33,7 @@ program.on('require', function(option){
 })
 
 program.on('transform', function(option){
-    if (option.charAt(0) == '.') option = process.cwd() + '/' + option
-    wrapup.scanner.addTransform(require(option))
+    wrapup.scanner.addTransform(require(relative(option)))
 })
 
 program.on('in-path', function(option){

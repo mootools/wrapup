@@ -295,6 +295,9 @@ wrup amd-combined --require ./main.js
 # piping the AST JSON into uglifyjs
 wrup browser --require ./main.js --ast | uglifyjs --spidermonkey -c -m
 
+# use transforms, for example to compile coffeescript
+wrup browser -r ./test.coffee --transform coffeeify
+
 # source maps
 wrup browser -r ./main.js --output test.js --source-map test.map
 
