@@ -137,8 +137,8 @@ wrapup({
 
 - `globalize` define the global scope where named modules are attached to.
   By default it uses global var statements.
-- `compress` if set to true, will compress the resulting javascript file using
-  uglify-js. Defaults to false.
+- `compress` if set to true, will compress the resulting JavaScript file using
+  esmangle. Defaults to false.
 - `output` Used to specify an output file. Defaults to stdout.
 - `inPath` (cli: `--in-path`) Enforce that all modules are in a specified path.
   This helps security that a random file cannot require any file on the user's
