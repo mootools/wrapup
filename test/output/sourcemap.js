@@ -1,10 +1,10 @@
-(function (modules) {
+(function (modules, global) {
     var cache = {}, require = function (id) {
             var module = cache[id];
             if (!module) {
                 module = cache[id] = {};
                 var exports = module.exports = {};
-                modules[id].call(exports, require, module, exports, typeof window == 'undefined' ? {} : window);
+                modules[id].call(exports, require, module, exports, global);
             }
             return module.exports;
         };
@@ -27,4 +27,5 @@
             console.log('up1');
         };
     }
-}));
+}, this));
+//# sourceMappingURL=http://localhost:8000/test/output/sourcemap.result.map
