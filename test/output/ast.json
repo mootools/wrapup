@@ -12,6 +12,10 @@
             {
               "type": "Identifier",
               "name": "modules"
+            },
+            {
+              "type": "Identifier",
+              "name": "global"
             }
           ],
           "defaults": [],
@@ -196,32 +200,8 @@
                                         "name": "exports"
                                       },
                                       {
-                                        "type": "ConditionalExpression",
-                                        "test": {
-                                          "type": "BinaryExpression",
-                                          "operator": "==",
-                                          "left": {
-                                            "type": "UnaryExpression",
-                                            "operator": "typeof",
-                                            "argument": {
-                                              "type": "Identifier",
-                                              "name": "window"
-                                            },
-                                            "prefix": true
-                                          },
-                                          "right": {
-                                            "type": "Literal",
-                                            "value": "undefined"
-                                          }
-                                        },
-                                        "consequent": {
-                                          "type": "ObjectExpression",
-                                          "properties": []
-                                        },
-                                        "alternate": {
-                                          "type": "Identifier",
-                                          "name": "window"
-                                        }
+                                        "type": "Identifier",
+                                        "name": "global"
                                       }
                                     ]
                                   }
@@ -1423,6 +1403,9 @@
                 "kind": "init"
               }
             ]
+          },
+          {
+            "type": "ThisExpression"
           }
         ]
       }
