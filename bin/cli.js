@@ -20,7 +20,7 @@ wrapup.scanner.on('warn', function(err){
 
 program
     .version(json.version)
-    .option('-r, --require <path>', 'requires a module. Uses node to resolve modules. If the form namepace=path is used the module will use a namespace')
+    .option('-r, --require <path>', 'requires a module. Uses node to resolve modules. If the form namespace=path is used the module will use a namespace')
     .option('-t, --transform <module>', 'requires a module for transforming source code of modules')
     .option('-w, --watch', 'watch changes to every resolved module and wraps up')
     .option('-t, --transform', 'a module that can transform source code or ASTs')
